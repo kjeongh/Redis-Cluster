@@ -26,6 +26,7 @@ Redis-Cluster
 
 ## 1.  docker-compose up --build 실행
 3개의 master 컨테이너와 3개의 slave컨테이너 구성
+
 CLUSTER ADD실습용 추가 master노드 포함 (클러스터 구성 스크립트에 포함되지 않음)
 
 <br><br>
