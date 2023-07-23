@@ -3,6 +3,7 @@ Redis Cluter구성 실습
 
 ## 디렉토리 구조
 Redis-Cluster
+```
 .
 ├── cluster-create.zsh
 ├── docker-compose.yml
@@ -17,7 +18,7 @@ Redis-Cluster
 ├── redis-slave-1.conf
 ├── redis-slave-2.conf
 ├── redis-slave-3.conf
-
+```
 
 ## 1.  docker-compose up --build 실행
 ## 2. ./create-cluster.zsh 실행 (zsh쉘이 아닐 경우 파일 내 커맨드 직접 입력)
