@@ -24,9 +24,20 @@ Redis-Cluster
 ## 2. ./create-cluster.zsh 실행 (zsh쉘이 아닐 경우 파일 내 커맨드 직접 입력)
 cluster 구성 확인 메세지에 'yes'응답 -> 클러스터 구성 완료
 
-##3. sample dataset 추가
-https://github.com/redis-developer/redis-datasets
+## 3. sample dataset 추가
+https://github.com/redis-developer/redis-datasets 참고
 
-localhost:8081로 접속하여 모니터링
+## 4. redis-cli설치 후 데이터셋 추가
+컨테이너 내에서 접속시 필요 없음
+
+```
+brew install redis-cli
+```
+
+```
+➜  user-database git:(master) ✗ redis-cli -h localhost -p 7003 < ./import_users.redis
+```
+
+localhost:8001로 접속하여 모니터링
 
 
