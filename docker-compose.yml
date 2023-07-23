@@ -1,0 +1,90 @@
+version: '3'
+services:
+  redis-master-1:
+    container_name: redis-master-1
+    image: redis
+    command: redis-server /etc/redis.conf
+    volumes:
+      - ./redis-master-1.conf:/etc/redis.conf
+    restart: always
+    ports:
+      - 7001:7001
+      - 17001:17001
+
+  redis-master-2:
+    container_name: redis-master-2
+    image: redis
+    command: redis-server /etc/redis.conf
+    volumes:
+      - ./redis-master-2.conf:/etc/redis.conf
+    restart: always
+    ports:
+      - 7002:7002
+      - 17002:17002
+
+  redis-master-3:
+    container_name: redis-master-3
+    image: redis
+    command: redis-server /etc/redis.conf
+    volumes:
+      - ./redis-master-3.conf:/etc/redis.conf
+    restart: always
+    ports:
+      - 7003:7003
+      - 17003:17003
+
+  redis-slave-1:
+    container_name: redis-slave-1
+    image: redis
+    command: redis-server /etc/redis.conf
+    volumes:
+      - ./redis-slave-1.conf:/etc/redis.conf
+    restart: always
+    ports:
+      - 7101:7101
+      - 17101:17101
+
+  redis-slave-2:
+    container_name: redis-slave-2
+    image: redis
+    command: redis-server /etc/redis.conf
+    volumes:
+      - ./redis-slave-2.conf:/etc/redis.conf
+    restart: always
+    ports:
+      - 7102:7102
+      - 17102:17102
+
+  redis-slave-3:
+    container_name: redis-slave-3
+    image: redis
+    command: redis-server /etc/redis.conf
+    volumes:
+      - ./redis-slave-3.conf:/etc/redis.conf
+    restart: always
+    ports:
+      - 7103:7103
+      - 17103:17103
+
+  #CLUSTER ADD 테스트용 - 클러스터 구성 커맨드에서 제외된 상태
+  redis-master-4:
+    container_name: redis-master-4
+    image: redis
+    command: redis-server /etc/redis.conf
+    volumes:
+      - ./redis-master-4.conf:/etc/redis.conf
+    restart: always
+    ports:
+      - 7004:7004
+      - 17004:17004
+
+  #모니터링
+  redis-insight:
+    image: redislabs/redisinsight:latest
+    ports:
+      - 8001:8001
+    restart: always
+    volumes:
+      - ./config.json:/etc/redislabs/redisinsight/config.json
+      - ./data/redisinsight:/db
+
