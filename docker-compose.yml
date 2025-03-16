@@ -87,8 +87,8 @@ services:
     image: oliver006/redis_exporter
     environment:
       - REDIS_ADDR=redis-master-1:7001
-    ports:
-      - 9121:9121
+    expose:
+      - 9121
     restart: always
     depends_on:
       - redis-master-1
@@ -98,8 +98,8 @@ services:
     image: oliver006/redis_exporter
     environment:
       - REDIS_ADDR=redis-master-2:7002
-    ports:
-      - 9122:9121
+    expose:
+      - 9121
     restart: always
     depends_on:
       - redis-master-2
@@ -109,8 +109,8 @@ services:
     image: oliver006/redis_exporter
     environment:
       - REDIS_ADDR=redis-master-3:7003
-    ports:
-      - 9123:9121
+    expose:
+      - 9121
     restart: always
     depends_on:
       - redis-master-3
@@ -120,8 +120,8 @@ services:
     image: oliver006/redis_exporter
     environment:
       - REDIS_ADDR=redis-slave-1:7101
-    ports:
-      - 9124:9121
+    expose:
+      - 9121
     restart: always
     depends_on:
       - redis-slave-1
@@ -131,8 +131,8 @@ services:
     image: oliver006/redis_exporter
     environment:
       - REDIS_ADDR=redis-slave-2:7102
-    ports:
-      - 9125:9121
+    expose:
+      - 9121
     restart: always
     depends_on:
       - redis-slave-2
@@ -142,8 +142,8 @@ services:
     image: oliver006/redis_exporter
     environment:
       - REDIS_ADDR=redis-slave-3:7103
-    ports:
-      - 9126:9121
+    expose:
+      - 9121
     restart: always
     depends_on:
       - redis-slave-3
@@ -154,6 +154,7 @@ services:
     image: prom/prometheus
     volumes:
       - ./mornitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./data/prometheus:/prometheus
     ports:
       - 9090:9090
     restart: always
@@ -169,6 +170,9 @@ services:
   grafana:
     container_name: grafana
     image: grafana/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=natel-discrete-panel  # 상태 전환 모니터링을 위한 수평 그래프 플러그인
     volumes:
       - ./data/grafana:/var/lib/grafana
     ports:
