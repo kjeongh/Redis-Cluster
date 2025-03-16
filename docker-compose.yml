@@ -1,5 +1,6 @@
 version: '3'
 services:
+  # Redis Master Nodes
   redis-master-1:
     container_name: redis-master-1
     image: redis
@@ -10,7 +11,8 @@ services:
     restart: always
     ports:
       - 7001:7001
-      - 17001:17001
+    expose:
+      - 17001 # Cluster Bus용 포트
 
   redis-master-2:
     container_name: redis-master-2
@@ -23,6 +25,8 @@ services:
     ports:
       - 7002:7002
       - 17002:17002
+    expose:
+      - 17002
 
   redis-master-3:
     container_name: redis-master-3
@@ -34,8 +38,10 @@ services:
     restart: always
     ports:
       - 7003:7003
-      - 17003:17003
+    expose:
+      - 17003
 
+  # Redis Slave Nodes
   redis-slave-1:
     container_name: redis-slave-1
     image: redis
@@ -46,19 +52,21 @@ services:
     restart: always
     ports:
       - 7101:7101
-      - 17101:17101
+    expose:
+      - 17101
 
   redis-slave-2:
-      container_name: redis-slave-2
-      image: redis
-      command: redis-server /etc/redis.conf
-      volumes:
-        - ./redis-slave-2.conf:/etc/redis.conf
-        - ./data/redis-2/2:/data
-      restart: always
-      ports:
-        - 7102:7102
-        - 17102:17102
+    container_name: redis-slave-2
+    image: redis
+    command: redis-server /etc/redis.conf
+    volumes:
+      - ./redis-slave-2.conf:/etc/redis.conf
+      - ./data/redis-2/2:/data
+    restart: always
+    ports:
+      - 7102:7102
+    expose:
+      - 17102
 
   redis-slave-3:
     container_name: redis-slave-3
@@ -70,31 +78,106 @@ services:
     restart: always
     ports:
       - 7103:7103
-      - 17103:17103
+    expose:
+      - 17103
 
-  #CLUSTER ADD 테스트용 - 클러스터 구성 커맨드에서 제외된 상태
-#   redis-master-4:
-#     container_name: redis-master-4
-#     image: redis
-#     command: redis-server /etc/redis.conf
-#     volumes:
-#       - ./redis-master-4.conf:/etc/redis.conf
-#     restart: always
-#     ports:
-#       - 7004:7004
-#       - 17004:17004
-#   redis-overflow-test:
-#     container_name: redis-test
-#     image: redis
-# #    command: redis-server /etc/redis.conf
-#     volumes:
-#       - ./redis-datasets:/etc/data-init
-#     restart: always
-#     ports:
-#       - 7001:7001
-#       - 17001:17001
+  # Redis Exporter (각 Redis 인스턴스별로 Exporter 추가)
+  redis-exporter-master-1:
+    container_name: redis-exporter-master-1
+    image: oliver006/redis_exporter
+    environment:
+      - REDIS_ADDR=redis-master-1:7001
+    ports:
+      - 9121:9121
+    restart: always
+    depends_on:
+      - redis-master-1
 
-  #모니터링
+  redis-exporter-master-2:
+    container_name: redis-exporter-master-2
+    image: oliver006/redis_exporter
+    environment:
+      - REDIS_ADDR=redis-master-2:7002
+    ports:
+      - 9122:9121
+    restart: always
+    depends_on:
+      - redis-master-2
+
+  redis-exporter-master-3:
+    container_name: redis-exporter-master-3
+    image: oliver006/redis_exporter
+    environment:
+      - REDIS_ADDR=redis-master-3:7003
+    ports:
+      - 9123:9121
+    restart: always
+    depends_on:
+      - redis-master-3
+
+  redis-exporter-slave-1:
+    container_name: redis-exporter-slave-1
+    image: oliver006/redis_exporter
+    environment:
+      - REDIS_ADDR=redis-slave-1:7101
+    ports:
+      - 9124:9121
+    restart: always
+    depends_on:
+      - redis-slave-1
+
+  redis-exporter-slave-2:
+    container_name: redis-exporter-slave-2
+    image: oliver006/redis_exporter
+    environment:
+      - REDIS_ADDR=redis-slave-2:7102
+    ports:
+      - 9125:9121
+    restart: always
+    depends_on:
+      - redis-slave-2
+
+  redis-exporter-slave-3:
+    container_name: redis-exporter-slave-3
+    image: oliver006/redis_exporter
+    environment:
+      - REDIS_ADDR=redis-slave-3:7103
+    ports:
+      - 9126:9121
+    restart: always
+    depends_on:
+      - redis-slave-3
+
+  # Prometheus
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    restart: always
+    depends_on:
+      - redis-exporter-master-1
+      - redis-exporter-master-2
+      - redis-exporter-master-3
+      - redis-exporter-slave-1
+      - redis-exporter-slave-2
+      - redis-exporter-slave-3
+
+  # Grafana
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    volumes:
+      - ./grafana-data:/var/lib/grafana
+    ports:
+      - 3000:3000
+    restart: always
+    depends_on:
+      - prometheus
+
+  # Redis Insight (GUI)
   redis-insight:
     image: redislabs/redisinsight:latest
     ports:
@@ -104,3 +187,5 @@ services:
       - ./config.json:/etc/redislabs/redisinsight/config.json
       - ./data/redisinsight:/db
 
+
+# TODO: 볼륨 설정 바꾸기
