@@ -153,7 +153,7 @@ services:
     container_name: prometheus
     image: prom/prometheus
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./mornitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - 9090:9090
     restart: always
@@ -170,22 +170,9 @@ services:
     container_name: grafana
     image: grafana/grafana
     volumes:
-      - ./grafana-data:/var/lib/grafana
+      - ./data/grafana:/var/lib/grafana
     ports:
       - 3000:3000
     restart: always
     depends_on:
       - prometheus
-
-  # Redis Insight (GUI)
-  redis-insight:
-    image: redislabs/redisinsight:latest
-    ports:
-      - 8001:8001
-    restart: always
-    volumes:
-      - ./config.json:/etc/redislabs/redisinsight/config.json
-      - ./data/redisinsight:/db
-
-
-# TODO: 볼륨 설정 바꾸기
