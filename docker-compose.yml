@@ -9,10 +9,9 @@ services:
       - ./redis-master-1.conf:/etc/redis.conf
       - ./data/redis-1/1:/data
     restart: always
-    ports:
-      - 7001:7001
     expose:
       - 17001 # Cluster Bus용 포트
+      - 7001
 
   redis-master-2:
     container_name: redis-master-2
@@ -22,11 +21,9 @@ services:
       - ./redis-master-2.conf:/etc/redis.conf
       - ./data/redis-2/1:/data
     restart: always
-    ports:
-      - 7002:7002
-      - 17002:17002
     expose:
       - 17002
+      - 7002
 
   redis-master-3:
     container_name: redis-master-3
@@ -36,10 +33,9 @@ services:
       - ./redis-master-3.conf:/etc/redis.conf
       - ./data/redis-3/1:/data
     restart: always
-    ports:
-      - 7003:7003
     expose:
       - 17003
+      - 7003
 
   # Redis Slave Nodes
   redis-slave-1:
@@ -50,10 +46,9 @@ services:
       - ./redis-slave-1.conf:/etc/redis.conf
       - ./data/redis-1/2:/data
     restart: always
-    ports:
-      - 7101:7101
     expose:
       - 17101
+      - 7101
 
   redis-slave-2:
     container_name: redis-slave-2
@@ -63,10 +58,9 @@ services:
       - ./redis-slave-2.conf:/etc/redis.conf
       - ./data/redis-2/2:/data
     restart: always
-    ports:
-      - 7102:7102
     expose:
       - 17102
+      - 7102
 
   redis-slave-3:
     container_name: redis-slave-3
@@ -76,10 +70,9 @@ services:
       - ./redis-slave-3.conf:/etc/redis.conf
       - ./data/redis-3/2:/data
     restart: always
-    ports:
-      - 7103:7103
     expose:
       - 17103
+      - 7103
 
   # Redis Exporter (각 Redis 인스턴스별로 Exporter 추가)
   redis-exporter-master-1:
@@ -182,3 +175,34 @@ services:
     restart: always
     depends_on:
       - prometheus
+
+  # Proxy
+  redis-proxy-1:
+    container_name: redis-proxy-1
+    image: megaxcn/predixy
+    command: predixy /etc/predixy.conf
+    volumes:
+      - ./proxy/predixy.conf:/etc/predixy.conf
+      - ./proxy/cluster.conf:/etc/cluster.conf
+    restart: always
+    ports:
+      - 7201:7617
+    depends_on:
+      - redis-master-1
+      - redis-master-2
+      - redis-master-3
+
+  redis-proxy-2:
+    container_name: redis-proxy-2
+    image: megaxcn/predixy
+    command: predixy /etc/predixy.conf
+    volumes:
+      - ./proxy/predixy.conf:/etc/predixy.conf
+      - ./proxy/cluster.conf:/etc/cluster.conf
+    restart: always
+    ports:
+      - 7202:7617
+    depends_on:
+    - redis-master-1
+    - redis-master-2
+    - redis-master-3
