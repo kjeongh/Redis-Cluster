@@ -12,6 +12,8 @@ services:
     expose:
       - 17001 # Cluster Bus용 포트
       - 7001
+    networks:
+      - redis-net
 
   redis-master-2:
     container_name: redis-master-2
@@ -24,6 +26,8 @@ services:
     expose:
       - 17002
       - 7002
+    networks:
+      - redis-net
 
   redis-master-3:
     container_name: redis-master-3
@@ -36,6 +40,8 @@ services:
     expose:
       - 17003
       - 7003
+    networks:
+      - redis-net
 
   # Redis Slave Nodes
   redis-slave-1:
@@ -49,6 +55,8 @@ services:
     expose:
       - 17101
       - 7101
+    networks:
+      - redis-net
 
   redis-slave-2:
     container_name: redis-slave-2
@@ -61,6 +69,8 @@ services:
     expose:
       - 17102
       - 7102
+    networks:
+      - redis-net
 
   redis-slave-3:
     container_name: redis-slave-3
@@ -73,6 +83,8 @@ services:
     expose:
       - 17103
       - 7103
+    networks:
+      - redis-net
 
   # Redis Exporter (각 Redis 인스턴스별로 Exporter 추가)
   redis-exporter-master-1:
@@ -85,6 +97,9 @@ services:
     restart: always
     depends_on:
       - redis-master-1
+    networks:
+      - redis-net
+      - monitoring-net
 
   redis-exporter-master-2:
     container_name: redis-exporter-master-2
@@ -96,6 +111,9 @@ services:
     restart: always
     depends_on:
       - redis-master-2
+    networks:
+      - redis-net
+      - monitoring-net
 
   redis-exporter-master-3:
     container_name: redis-exporter-master-3
@@ -107,6 +125,9 @@ services:
     restart: always
     depends_on:
       - redis-master-3
+    networks:
+      - redis-net
+      - monitoring-net
 
   redis-exporter-slave-1:
     container_name: redis-exporter-slave-1
@@ -118,6 +139,9 @@ services:
     restart: always
     depends_on:
       - redis-slave-1
+    networks:
+      - redis-net
+      - monitoring-net
 
   redis-exporter-slave-2:
     container_name: redis-exporter-slave-2
@@ -129,6 +153,9 @@ services:
     restart: always
     depends_on:
       - redis-slave-2
+    networks:
+      - redis-net
+      - monitoring-net
 
   redis-exporter-slave-3:
     container_name: redis-exporter-slave-3
@@ -140,6 +167,9 @@ services:
     restart: always
     depends_on:
       - redis-slave-3
+    networks:
+      - redis-net
+      - monitoring-net
 
   # Prometheus
   prometheus:
@@ -158,6 +188,8 @@ services:
       - redis-exporter-slave-1
       - redis-exporter-slave-2
       - redis-exporter-slave-3
+    networks:
+      - monitoring-net
 
   # Grafana
   grafana:
@@ -175,6 +207,8 @@ services:
     restart: always
     depends_on:
       - prometheus
+    networks:
+      - monitoring-net
 
   # Proxy
   redis-proxy-1:
@@ -191,6 +225,9 @@ services:
       - redis-master-1
       - redis-master-2
       - redis-master-3
+    networks:
+      - proxy-net
+      - redis-net
 
   redis-proxy-2:
     container_name: redis-proxy-2
@@ -206,3 +243,14 @@ services:
     - redis-master-1
     - redis-master-2
     - redis-master-3
+    networks:
+      - proxy-net
+      - redis-net
+
+networks:
+  redis-net:
+    driver: bridge
+  monitoring-net:
+    driver: bridge
+  proxy-net:
+    driver: bridge
