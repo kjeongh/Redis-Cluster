@@ -175,6 +175,8 @@ services:
       - GF_INSTALL_PLUGINS=natel-discrete-panel  # 상태 전환 모니터링을 위한 수평 그래프 플러그인
     volumes:
       - ./data/grafana:/var/lib/grafana
+      - ./mornitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./mornitoring/grafana/dashboards:/var/lib/grafana/dashboards
     ports:
       - 3000:3000
     restart: always

@@ -25,10 +25,7 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-      },
+      "datasource": "Prometheus",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -76,10 +73,7 @@
       "pluginVersion": "10.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
           "expr": "sum(redis_db_keys{job=\"$cluster\"}) by (instance)",
           "format": "time_series",
@@ -96,10 +90,7 @@
       "type": "piechart"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-      },
+      "datasource": "Prometheus",
       "description": "노드 uptime의 최솟값",
       "fieldConfig": {
         "defaults": {
@@ -154,10 +145,7 @@
       "pluginVersion": "10.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
           "expr": "min(redis_uptime_in_seconds{job=\"$cluster\"}) / 3600",
           "hide": false,
@@ -170,10 +158,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-      },
+      "datasource": "Prometheus",
       "description": "초록색: 현재 마스터\n하늘색: 현재 레플리카\n\n레이블의 master/slave는 최초 클러스터 구성시의 정보일 뿐, \n\n현재 master/slave정보와 일치하지 않을 수 있음",
       "fieldConfig": {
         "defaults": {
@@ -240,10 +225,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
           "expr": "sum((redis_instance_info{role=\"master\"} * 1) or (redis_instance_info{role=\"slave\"} * 0)) by (instance)",
           "hide": false,
@@ -258,10 +240,7 @@
       "type": "status-history"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-      },
+      "datasource": "Prometheus",
       "description": "0인 경우, 마스터 다운시 해당 슬롯 접근 불가",
       "fieldConfig": {
         "defaults": {
@@ -326,10 +305,7 @@
       "pluginVersion": "10.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
           "expr": "redis_connected_slaves{job=\"$cluster\"}\n* on(instance) group_left(role) redis_instance_info{role=\"master\", job=\"$cluster\"}",
           "instant": false,
@@ -342,10 +318,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-      },
+      "datasource": "Prometheus",
       "description": "초당 평균 처리율",
       "fieldConfig": {
         "defaults": {
@@ -425,10 +398,7 @@
       "pluginVersion": "10.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
           "expr": "rate(redis_commands_processed_total{job=\"$cluster\"}[5m])",
           "format": "time_series",
@@ -446,10 +416,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-      },
+      "datasource": "Prometheus",
       "description": "실행횟수 상위 5개 명령어 초당 실행 횟수",
       "fieldConfig": {
         "defaults": {
@@ -532,10 +499,7 @@
       "pluginVersion": "10.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-          },
+          "datasource": "Prometheus",
           "expr": "topk(5, irate(redis_commands_total{job=\"$cluster\"} [1m]))",
           "format": "time_series",
           "interval": "",
@@ -550,10 +514,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-      },
+      "datasource": "Prometheus",
       "description": "RSS - Used Memory\n\n노드별 Fragment를 나타냄",
       "fieldConfig": {
         "defaults": {
@@ -650,10 +611,7 @@
       "pluginVersion": "10.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
           "expr": "sum(redis_memory_used_rss_bytes) by (instance) - sum(redis_memory_used_bytes) by (instance)\n",
           "format": "time_series",
@@ -675,10 +633,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-      },
+      "datasource": "Prometheus",
       "editable": true,
       "error": false,
       "fill": 1,
@@ -721,10 +676,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
           "expr": "rate(redis_net_input_bytes_total{job=\"$cluster\"}[5m])",
           "format": "time_series",
@@ -736,10 +688,7 @@
           "step": 240
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
           "expr": "rate(redis_net_output_bytes_total{job=\"$cluster\"}[5m])",
           "format": "time_series",
@@ -793,10 +742,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-      },
+      "datasource": "Prometheus",
       "description": "평균적으로 Expired/Eviction되는 수 (5분단위)",
       "editable": true,
       "error": false,
@@ -845,10 +791,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
           "expr": "sum(rate(redis_expired_keys_total{job=\"$cluster\"}[5m])) by (addr)",
           "format": "time_series",
@@ -862,10 +805,7 @@
           "target": ""
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
           "expr": "sum(rate(redis_evicted_keys_total{job=\"$cluster\"}[5m])) by (addr)",
           "format": "time_series",
@@ -909,10 +849,7 @@
       }
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-      },
+      "datasource": "Prometheus",
       "description": "만료 시간이 설정되지 않은 항목 수",
       "fieldConfig": {
         "defaults": {
@@ -989,10 +926,7 @@
       "pluginVersion": "10.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
           "expr": "sum (redis_db_keys{job=\"$cluster\"}) - sum (redis_db_keys_expiring{job=\"$cluster\"}) ",
           "format": "time_series",
@@ -1005,10 +939,7 @@
           "target": ""
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
           "expr": "sum (redis_db_keys_expiring{job=\"$cluster\"}) ",
           "format": "time_series",
@@ -1040,10 +971,7 @@
           "text": "redis-cluster",
           "value": "redis-cluster"
         },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "bee8e6a4-9704-4c05-9e70-a7e008bc8286"
-        },
+        "datasource": "Prometheus",
         "definition": "label_values(redis_up, job)",
         "hide": 0,
         "includeAll": false,
